@@ -8,6 +8,7 @@ import { LocationStrategy, HashLocationStrategy} from '@angular/common';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { UsersModule } from './users/users.module';
+
 import { AppsListModule } from './apps-list/apps-list.module';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SecurityModule } from './security/security.module';
 import { ProfileModule } from './profile/profile.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { AgendaComponent } from './agenda/agenda.component';
+
+
 
 
 @NgModule({
@@ -39,7 +43,8 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     WelcomeComponent,
     NotFoundComponent,
     DrawerListComponent,
-    ForbiddenComponent
+    ForbiddenComponent,
+    AgendaComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +54,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     SharedModule,
     AppsListModule,
     UsersModule,
+   
     SecurityModule,
     ProfileModule,
     AppRoutingModule,
