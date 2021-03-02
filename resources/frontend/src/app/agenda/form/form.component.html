@@ -1,0 +1,47 @@
+<h1 mat-dialog-title><span *ngIf="permiso.id">Editar</span> <span *ngIf="!permiso.id">Nuevo</span> Contacto</h1>
+<div mat-dialog-content>
+    <div class="form-container" [formGroup]="permisoForm">
+        <div class="form-loading-shade" *ngIf="isLoading">
+            <mat-spinner *ngIf="isLoading"></mat-spinner>
+        </div>
+
+
+        <mat-form-field>
+            <input matInput id="nombre" formControlName="nombre" placeholder="Nombre(s)" required>
+            <mat-error *ngIf="permisoForm.get('nombre').invalid && (permisoForm.get('nombre').dirty || permisoForm.get('nombre').touched)">
+                <span *ngIf="permisoForm.get('nombre').errors.required">El nombre es obligatorio</span>
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field>
+            <input matInput id="apellido_paterno" formControlName="apellido_paterno" placeholder="Apellido Paterno" required>
+            <mat-error *ngIf="permisoForm.get('apellido_paterno').invalid && (permisoForm.get('apellido_paterno').dirty || permisoForm.get('apellido_paterno').touched)">
+                <span *ngIf="permisoForm.get('apellido_paterno').errors.required">El apellido paterno es obligatorio</span>
+            </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field>
+            <input matInput id="apellido_materno" formControlName="apellido_materno" placeholder="Apellido Materno" required>
+            <mat-error *ngIf="permisoForm.get('apellido_materno').invalid && (permisoForm.get('apellido_materno').dirty || permisoForm.get('apellido_materno').touched)">
+                <span *ngIf="permisoForm.get('apellido_materno').errors.required">El apellido materno es obligatorio</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput id="direccion" formControlName="direccion" placeholder="Domicilio" required>
+            <mat-error *ngIf="permisoForm.get('direccion').invalid && (permisoForm.get('direccion').dirty || permisoForm.get('direccion').touched)">
+                <span *ngIf="permisoForm.get('direccion').errors.required">La direccion es obligatoria</span>
+            </mat-error>
+        </mat-form-field>
+
+
+    </div>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-actions>
+    <span fxFlex></span>
+    <button mat-button (click)='onNoClick()'>Cancelar</button>
+    <button mat-raised-button (click)="saveAgenda()" color="primary" [disabled]="permisoForm.invalid || isLoading"><mat-icon>save</mat-icon> Guardar</button>
+</div>

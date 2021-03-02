@@ -30,7 +30,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SecurityModule } from './security/security.module';
 import { ProfileModule } from './profile/profile.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { AgendaComponent } from './agenda/agenda.component';
+import { AgendaModule } from './agenda/agenda.module';
 
 
 
@@ -44,7 +44,6 @@ import { AgendaComponent } from './agenda/agenda.component';
     NotFoundComponent,
     DrawerListComponent,
     ForbiddenComponent,
-    AgendaComponent
   ],
   imports: [
     BrowserModule,
@@ -54,8 +53,8 @@ import { AgendaComponent } from './agenda/agenda.component';
     SharedModule,
     AppsListModule,
     UsersModule,
-   
     SecurityModule,
+    AgendaModule,
     ProfileModule,
     AppRoutingModule,
     WildcardRoutingModule,
