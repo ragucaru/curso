@@ -21,7 +21,7 @@ class CreateTelefonoAgendaTable extends Migration
             $table->timestamps();
 
 
-            $table->foreign('agenda_id')->references('id')->on('telefono_agenda');
+            $table->foreign('agenda_id')->references('id')->on('agenda');
         });
     }
 

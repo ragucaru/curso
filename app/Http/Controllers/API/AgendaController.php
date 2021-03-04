@@ -11,8 +11,9 @@ use Validator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agenda;
+use App\Models\AgendaTelefono;
 
-use DB;
+use DB,Response;
 
 
 
@@ -26,7 +27,7 @@ class AgendaController extends Controller
         try{
           
             $parametros = $request->all();
-            $agenda = Agenda::getModel();
+            $agenda = Agenda::select('agenda.*')->with('agendatelefono');
 
             //Filtros, busquedas, ordenamiento
             if($parametros['query']){
@@ -69,6 +70,9 @@ class AgendaController extends Controller
      */
     public function store(Request $request)
     {
+
+        $parametros = $request->all();
+
         try{
             $validation_rules = [
                 'nombre' => 'required',
@@ -91,7 +95,7 @@ class AgendaController extends Controller
             if($resultado->passes()){
                 DB::beginTransaction();
 
-                $agenda = new User();
+                $agenda = new Agenda();
                 $agenda->nombre = $parametros['nombre'];
                 $agenda->apellido_paterno = $parametros['apellido_paterno'];
                 $agenda->apellido_materno = $parametros['apellido_materno'];
@@ -99,21 +103,28 @@ class AgendaController extends Controller
                
                 
                 $agenda->save();
+               
+                foreach ($parametros['telefonos'] as $telefonos) {
 
-              /*   if(!$agenda->is_superuser){
-                    $roles = $parametros['roles'];
-                    $permisos = $parametros['permissions'];
-                }else{
-                    $roles = [];
-                    $permisos = [];
-                } 
+                    // if (is_array($telefonos))
+                    // $telefonos = (object) $telefonos;
+                    //$id_user=Usuarios::max('USERID'); 
+
+                    $telefono = new AgendaTelefono();
+                    $telefono->numero_telefono = $telefonos['telefono'];
+                    $telefono->agenda_id = $agenda->id;
+                    $telefono->save();
+                 
                 
-                $agenda->roles()->sync($roles);
-                $agenda->permissions()->sync($permisos);*/
-
+                }
+                
+                
+             
+                //$agenda->telefonos()->sync($telefonos);
+                
                 DB::commit();
 
-                return response()->json(['data'=>$agenda],HttpResponse::HTTP_OK);
+                return Response::json(array("status" => 200, "messages" => "Se agrego la información con exito", "data" => $parametros), 200);
             }else{
                 return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_CONFLICT);
             }

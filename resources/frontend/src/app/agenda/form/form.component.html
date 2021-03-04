@@ -7,7 +7,7 @@
 
         <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
 
-            <mat-form-field fxFlex="10%">
+            <mat-form-field fxFlex>
                 <input matInput id="nombre" formControlName="nombre" placeholder="Nombre(s)" required>
                 <mat-error *ngIf="permisoForm.get('nombre').invalid && (permisoForm.get('nombre').dirty || permisoForm.get('nombre').touched)">
                     <span *ngIf="permisoForm.get('nombre').errors.required">El nombre es obligatorio</span>
@@ -58,6 +58,9 @@
                     <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
                         <mat-form-field fxFlex>
                             <input matInput placeholder="Teléfono" formControlName="telefono" />
+                            <mat-error *ngIf="permisoForm.get('getTelefonos.controls[i]').invalid && (permisoForm.get('getTelefonos.controls[i]').dirty || permisoForm.get('getTelefonos.controls[i]').touched)">
+                                <span *ngIf="permisoForm.get('getTelefonos.controls[i]').errors.required">El apellido paterno es obligatorio</span>
+                            </mat-error>
                         </mat-form-field>
                         <button type="button" mat-mini-fab color="warn" matTooltip="Quitar Telefono" *ngIf="getTelefonos.controls.length > 1" (click)="removeTelefono(i)">
                              <mat-icon>delete</mat-icon>

@@ -18,7 +18,7 @@ export const APPS:App [] = [
             { name: "Responsables", route: "catalogos/responsables", icon: "adjust", permission: "uc5EjMH6WSVn79Wx8BJfAwddC3eMgcRI", },
         ],
     },
-    { name: 'Agenda',     route: "agenda",      icon: "assets/icons/users-roles.svg",           permission:"" },
+    { name: 'Agenda',     route: "agenda",      icon: "assets/icons/contactos.svg",           permission:"" },
     /*
     { name: "Seguridad", route: "seguridad", icon: "assets/icons/security-shield.svg", 
         children: [
