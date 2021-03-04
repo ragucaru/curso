@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { AgendaService } from '../agenda.service';
 import { CustomValidator } from '../../utils/classes/custom-validator';
 
@@ -28,11 +28,12 @@ export class FormComponent implements OnInit {
   provideID:boolean = false;
   
   permisoForm = this.fb.group({
-    'id': [{value:'',disabled:true},[Validators.maxLength(32),Validators.minLength(32), Validators.required, CustomValidator.notEqualToValidator('repeatedId')]],
+    //'id': [{value:'',disabled:true},[Validators.maxLength(32),Validators.minLength(32), Validators.required, CustomValidator.notEqualToValidator('repeatedId')]],
     'nombre':['',[Validators.required]],
     'apellido_paterno': ['',[Validators.required]],
     'apellido_materno': ['',[Validators.required]],
-    'direccion': ['',[Validators.required]]
+    'direccion': ['',[Validators.required]],
+    'telefonos': this.fb.array([this.fb.group({telefono: ['']})])
   });
 
   ngOnInit() {
@@ -127,6 +128,20 @@ export class FormComponent implements OnInit {
         }
       }
     }
+  }
+
+
+  get getTelefonos(){
+    return this.permisoForm.get('telefonos') as FormArray;
+  }
+  addTelefono() {
+    const control = <FormArray>this.permisoForm.controls['telefonos'];
+    control.push(this.fb.group({telefono: []}));
+  }
+
+  removeTelefono(index: number){
+    const control = <FormArray>this.permisoForm.controls['telefonos'];
+    control.removeAt(index);
   }
 
 }

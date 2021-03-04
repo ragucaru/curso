@@ -36,6 +36,32 @@
             </mat-error>
         </mat-form-field>
 
+        <mat-card formArrayName="telefonos">
+            <mat-card-title>Telefonos <button *ngIf="getTelefonos.controls.length > 0" (click)="addTelefono()" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
+                <mat-icon>add box</mat-icon>
+              </button></mat-card-title>
+            <mat-divider></mat-divider>
+            <div *ngFor="let item of getTelefonos.controls; let i=index">
+                <mat-divider *ngIf="getTelefonos.controls.length > 1 && i > 0"></mat-divider><br>
+                <div [formGroupName]="i">
+                    <div>
+                        <mat-form-field>
+                            <input matInput placeholder="telefono" formControlName="telefonos" />
+                        </mat-form-field>
+
+                        <button type="button" mat-mini-fab color="warn" fxFlex="nogrow" *ngIf="getTelefonos.controls.length > 1" (click)="removeTelefono(i)">
+                             <mat-icon>delete forever</mat-icon>
+                        </button>
+                        <!--  <a class="btn btn-link" (click)="removeTelefono(pointIndex)">Eliminar Telefono</a> -->
+                    </div>
+                </div>
+            </div>
+
+
+        </mat-card>
+
+
+
 
     </div>
 </div>

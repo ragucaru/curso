@@ -2,8 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agenda;
+
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Hash;
+use Validator;
+
+use App\Http\Controllers\Controller;
+use App\Models\Agenda;
+
+use DB;
+
+
+
+
+
 
 class AgendaController extends Controller
 {
@@ -46,7 +59,59 @@ class AgendaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $validation_rules = [
+                'nombre' => 'required',
+                'apellido_paterno' => 'required',   
+                'apellido_materno' => 'required' ,
+                'direccion' => 'required'           
+            ];
+        
+            $validation_eror_messages = [
+                'nombre.required' => 'El nombre es obligatorio',
+                'apellido_paterno.required' => 'El apellido paterno es obligatorio',
+                'apellido_materno.required' => 'El apellido materno es obligatorio',
+                'direccion.required' => 'El Domicilio es obligatorio'
+            ];
+
+            $parametros = $request->all();
+
+            $resultado = Validator::make($parametros,$validation_rules,$validation_eror_messages);
+
+            if($resultado->passes()){
+                DB::beginTransaction();
+
+                $agenda = new User();
+                $agenda->nombre = $parametros['nombre'];
+                $agenda->apellido_paterno = $parametros['apellido_paterno'];
+                $agenda->apellido_materno = $parametros['apellido_materno'];
+                $agenda->direccion = $parametros['direccion'];
+               
+                
+                $agenda->save();
+
+              /*   if(!$agenda->is_superuser){
+                    $roles = $parametros['roles'];
+                    $permisos = $parametros['permissions'];
+                }else{
+                    $roles = [];
+                    $permisos = [];
+                } 
+                
+                $agenda->roles()->sync($roles);
+                $agenda->permissions()->sync($permisos);*/
+
+                DB::commit();
+
+                return response()->json(['data'=>$agenda],HttpResponse::HTTP_OK);
+            }else{
+                return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_CONFLICT);
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
     }
 
     /**
@@ -80,7 +145,48 @@ class AgendaController extends Controller
      */
     public function update(Request $request, Agenda $agenda)
     {
-        //
+        try{
+            $validation_rules = [
+                'nombre' => 'required',
+                'apellido_paterno' => 'required',   
+                'apellido_materno' => 'required' ,
+                'direccion' => 'required'           
+            ];
+        
+            $validation_eror_messages = [
+                'nombre.required' => 'El nombre es obligatorio',
+                'apellido_paterno.required' => 'El apellido paterno es obligatorio',
+                'apellido_materno.required' => 'El apellido materno es obligatorio',
+                'direccion.required' => 'El Domicilio es obligatorio'
+            ];
+            $agenda = Agenda::find($id);
+
+            $parametros = $request->all();
+
+            $resultado = Validator::make($parametros,$validation_rules,$validation_eror_messages);
+
+            if($resultado->passes()){
+                DB::beginTransaction();
+
+                $agenda->nombre = $parametros['nombre'];
+                $agenda->apellido_paterno = $parametros['apellido_paterno'];
+                $agenda->apellido_materno = $parametros['apellido_materno'];
+                $agenda->direccion = $parametros['direccion'];
+               
+                
+                $agenda->save();
+
+                DB::commit();
+
+                return response()->json(['guardado'=>true,'agenda'=>$agenda],HttpResponse::HTTP_OK);
+            }else{
+                return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_CONFLICT);
+            }
+
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
     }
 
     /**
