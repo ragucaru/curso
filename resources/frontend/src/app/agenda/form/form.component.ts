@@ -137,6 +137,8 @@ export class FormComponent implements OnInit {
   addTelefono() {
     const control = <FormArray>this.permisoForm.controls['telefonos'];
     control.push(this.fb.group({telefono: []}));
+
+    console.log("FORM", this.permisoForm.value);
   }
 
   removeTelefono(index: number){

@@ -49,6 +49,7 @@ export class ListComponent implements OnInit {
 
     this.agendaService.getAgendaList(params).subscribe(
       response =>{
+        console.log(response);
         if(response.error) {
           let errorMessage = response.error.message;
           this.sharedService.showSnackBar(errorMessage, null, 3000);
@@ -82,7 +83,9 @@ export class ListComponent implements OnInit {
 
   openDialogForm(id:string = ''){
     const dialogRef = this.dialog.open(FormComponent, {
-      width: '500px',
+      width: '99%',
+      maxHeight: '90vh',
+      height: '643px',
       data: {id: id}
     });
 

@@ -14,6 +14,7 @@ export class AgendaService {
   constructor(private http: HttpClient) { }
 
   getAgendaList(payload):Observable<any> {
+    console.log(this.url);
     return this.http.get<any>(this.url,{params: payload}).pipe(
       map( response => {
         return response;

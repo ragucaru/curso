@@ -17,6 +17,7 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   getAvatars():Observable<any> {
+    
     return this.http.get<any>(this.url_avatars,{}).pipe(
       map( response => {
         return response;
@@ -41,6 +42,7 @@ export class UsersService {
   }
 
   getUserList(payload):Observable<any> {
+    console.log(this.url);
     return this.http.get<any>(this.url,{params: payload}).pipe(
       map( response => {
         return response;

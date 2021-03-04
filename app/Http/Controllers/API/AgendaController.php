@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
+
 
 
 use Illuminate\Http\Request;
@@ -20,22 +21,31 @@ use DB;
 
 class AgendaController extends Controller
 {
-    public function index()
-    {
+    public function index(Request $request){
+    
         try{
-            $parametros = Input::all();
-            
-            $agenda = Agenda::with('agendatelefono')->orderBy('nombre');
+          
+            $parametros = $request->all();
+            $agenda = Agenda::getModel();
 
             //Filtros, busquedas, ordenamiento
-            if(isset($parametros['query']) && $parametros['query']){
+            if($parametros['query']){
                 $agenda = $agenda->where(function($query)use($parametros){
-                    return $query->where('nombre','LIKE','%'.$parametros['query'].'%');
-                                //->orWhere('nombre','LIKE','%'.$parametros['query'].'%');
+                    return $query->where('nombre','LIKE','%'.$parametros['query'].'%')
+                                ->orWhere('apellido_paterno','LIKE','%'.$parametros['query'].'%');
+                                //->orWhere('email','LIKE','%'.$parametros['query'].'%');
                 });
-            }                             
-           
-            return response()->json(['data'=>$agenda],HttpResponse::HTTP_OK);
+            }
+
+            if(isset($parametros['page'])){
+                $resultadosPorPagina = isset($parametros["per_page"])? $parametros["per_page"] : 20;
+    
+                $agenda = $agenda->paginate($resultadosPorPagina);
+            } else {
+                $agenda = $agenda->get();
+            }
+
+            return response()->json(['data'=>$agenda,'parametros'=>$parametros],HttpResponse::HTTP_OK);
         }catch(\Exception $e){
             return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
         }
@@ -120,9 +130,15 @@ class AgendaController extends Controller
      * @param  \App\Models\CasosCovid\Agenda  $Agenda
      * @return \Illuminate\Http\Response
      */
-    public function show(Agenda $agenda)
+    public function show($id)
     {
-        //
+        $this->authorize('has-permission',\Permissions::CRUD_PERMISOS);
+        try{
+            $agenda = Agenda::find($id);
+            return response()->json(['data'=>$agenda],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
     }
 
     /**
@@ -143,7 +159,7 @@ class AgendaController extends Controller
      * @param  \App\Models\CasosCovid\Agenda  $Agenda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Agenda $agenda)
+    public function update(Request $request, $id)
     {
         try{
             $validation_rules = [
@@ -195,8 +211,16 @@ class AgendaController extends Controller
      * @param  \App\Models\CasosCovid\Agenda  $Agenda
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Agenda $agenda)
+    public function destroy($id)
     {
-        //
+        $this->authorize('has-permission',\Permissions::CRUD_PERMISOS);
+        try{
+            $agenda = Agenda::find($id);
+            $agenda->delete();
+
+            return response()->json(['data'=>'Contacto eliminado'], HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
     }
 }

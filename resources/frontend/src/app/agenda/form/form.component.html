@@ -1,42 +1,53 @@
 <h1 mat-dialog-title><span *ngIf="permiso.id">Editar</span> <span *ngIf="!permiso.id">Nuevo</span> Contacto</h1>
-<div mat-dialog-content>
+<div>
     <div class="form-container" [formGroup]="permisoForm">
         <div class="form-loading-shade" *ngIf="isLoading">
             <mat-spinner *ngIf="isLoading"></mat-spinner>
         </div>
 
+        <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
 
-        <mat-form-field>
-            <input matInput id="nombre" formControlName="nombre" placeholder="Nombre(s)" required>
-            <mat-error *ngIf="permisoForm.get('nombre').invalid && (permisoForm.get('nombre').dirty || permisoForm.get('nombre').touched)">
-                <span *ngIf="permisoForm.get('nombre').errors.required">El nombre es obligatorio</span>
-            </mat-error>
-        </mat-form-field>
-
-
-        <mat-form-field>
-            <input matInput id="apellido_paterno" formControlName="apellido_paterno" placeholder="Apellido Paterno" required>
-            <mat-error *ngIf="permisoForm.get('apellido_paterno').invalid && (permisoForm.get('apellido_paterno').dirty || permisoForm.get('apellido_paterno').touched)">
-                <span *ngIf="permisoForm.get('apellido_paterno').errors.required">El apellido paterno es obligatorio</span>
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field fxFlex="10%">
+                <input matInput id="nombre" formControlName="nombre" placeholder="Nombre(s)" required>
+                <mat-error *ngIf="permisoForm.get('nombre').invalid && (permisoForm.get('nombre').dirty || permisoForm.get('nombre').touched)">
+                    <span *ngIf="permisoForm.get('nombre').errors.required">El nombre es obligatorio</span>
+                </mat-error>
+            </mat-form-field>
 
 
-        <mat-form-field>
-            <input matInput id="apellido_materno" formControlName="apellido_materno" placeholder="Apellido Materno" required>
-            <mat-error *ngIf="permisoForm.get('apellido_materno').invalid && (permisoForm.get('apellido_materno').dirty || permisoForm.get('apellido_materno').touched)">
-                <span *ngIf="permisoForm.get('apellido_materno').errors.required">El apellido materno es obligatorio</span>
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field fxFlex>
+                <input matInput id="apellido_paterno" formControlName="apellido_paterno" placeholder="Apellido Paterno" required>
+                <mat-error *ngIf="permisoForm.get('apellido_paterno').invalid && (permisoForm.get('apellido_paterno').dirty || permisoForm.get('apellido_paterno').touched)">
+                    <span *ngIf="permisoForm.get('apellido_paterno').errors.required">El apellido paterno es obligatorio</span>
+                </mat-error>
+            </mat-form-field>
 
-        <mat-form-field>
-            <input matInput id="direccion" formControlName="direccion" placeholder="Domicilio" required>
-            <mat-error *ngIf="permisoForm.get('direccion').invalid && (permisoForm.get('direccion').dirty || permisoForm.get('direccion').touched)">
-                <span *ngIf="permisoForm.get('direccion').errors.required">La direccion es obligatoria</span>
-            </mat-error>
-        </mat-form-field>
+
+            <mat-form-field fxFlex>
+                <input matInput id="apellido_materno" formControlName="apellido_materno" placeholder="Apellido Materno" required>
+                <mat-error *ngIf="permisoForm.get('apellido_materno').invalid && (permisoForm.get('apellido_materno').dirty || permisoForm.get('apellido_materno').touched)">
+                    <span *ngIf="permisoForm.get('apellido_materno').errors.required">El apellido materno es obligatorio</span>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+
+            <mat-form-field fxFlex>
+                <input matInput id="direccion" formControlName="direccion" placeholder="Domicilio" required>
+                <mat-error *ngIf="permisoForm.get('direccion').invalid && (permisoForm.get('direccion').dirty || permisoForm.get('direccion').touched)">
+                    <span *ngIf="permisoForm.get('direccion').errors.required">La direccion es obligatoria</span>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+
+
 
         <mat-card formArrayName="telefonos">
+
             <mat-card-title>Telefonos <button *ngIf="getTelefonos.controls.length > 0" (click)="addTelefono()" mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon">
                 <mat-icon>add box</mat-icon>
               </button></mat-card-title>
@@ -44,13 +55,12 @@
             <div *ngFor="let item of getTelefonos.controls; let i=index">
                 <mat-divider *ngIf="getTelefonos.controls.length > 1 && i > 0"></mat-divider><br>
                 <div [formGroupName]="i">
-                    <div>
-                        <mat-form-field>
-                            <input matInput placeholder="telefono" formControlName="telefonos" />
+                    <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+                        <mat-form-field fxFlex>
+                            <input matInput placeholder="Teléfono" formControlName="telefono" />
                         </mat-form-field>
-
-                        <button type="button" mat-mini-fab color="warn" fxFlex="nogrow" *ngIf="getTelefonos.controls.length > 1" (click)="removeTelefono(i)">
-                             <mat-icon>delete forever</mat-icon>
+                        <button type="button" mat-mini-fab color="warn" matTooltip="Quitar Telefono" *ngIf="getTelefonos.controls.length > 1" (click)="removeTelefono(i)">
+                             <mat-icon>delete</mat-icon>
                         </button>
                         <!--  <a class="btn btn-link" (click)="removeTelefono(pointIndex)">Eliminar Telefono</a> -->
                     </div>
