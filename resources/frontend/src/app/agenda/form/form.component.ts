@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { AgendaService } from '../agenda.service';
 import { SharedService } from '../../shared/shared.service';
+
 import { Router, ActivatedRoute  } from '@angular/router';
 import { CustomValidator } from '../../utils/classes/custom-validator';
 
@@ -22,16 +23,17 @@ export class FormComponent implements OnInit {
     public dialogRef: MatDialogRef<FormComponent>,
     private fb: FormBuilder,
     private sharedService: SharedService,
+    
     public router: Router,
     @Inject(MAT_DIALOG_DATA) public data: FormDialogData
   ) {}
 
   isLoading:boolean = false;
-  permiso:any = {};
+  agenda:any = {};
 
   provideID:boolean = false;
   
-  permisoForm = this.fb.group({
+  agendaForm = this.fb.group({
     //'id': [{value:'',disabled:true},[Validators.maxLength(32),Validators.minLength(32), Validators.required, CustomValidator.notEqualToValidator('repeatedId')]],
     'nombre':['',[Validators.required]],
     'apellido_paterno': ['',[Validators.required]],
@@ -45,9 +47,11 @@ export class FormComponent implements OnInit {
     if(id){
       this.isLoading = true;
       this.agendaService.getAgenda(id).subscribe(
+        
         response => {
-          this.permiso = response.data;
-          this.permisoForm.patchValue(this.permiso);
+          console.log(response);
+          this.agenda = response.data;
+          this.agendaForm.patchValue(this.agenda);
           this.isLoading = false;
         },
         errorResponse => {
@@ -65,8 +69,8 @@ export class FormComponent implements OnInit {
   saveAgenda(){
     
     this.isLoading = true;
-    if(this.permiso.id){
-      this.agendaService.updateAgenda(this.permiso.id,this.permisoForm.value).subscribe(
+    if(this.agenda.id){
+      this.agendaService.updateAgenda(this.agenda.id,this.agendaForm.value).subscribe(
         response =>{
           this.dialogRef.close(true);
           //console.log(response);
@@ -82,15 +86,13 @@ export class FormComponent implements OnInit {
           }
       });
     }else{
-      this.agendaService.createAgenda(this.permisoForm.value).subscribe(
-        response =>{
-          this.isLoading = false;
-
+      this.agendaService.createAgenda(this.agendaForm.value).subscribe(
+        response =>{        
           let Message = 'Se agrego el contacto con Éxito';
-          this.sharedService.showSnackBar(Message, 'Cerrar', 5000);
-
-          this.dialogRef.close();
-         // this.router.navigate(['/agenda']);
+          this.sharedService.showSnackBar(Message, 'Cerrar', 5000); 
+          this.dialogRef.close(true);
+          this.isLoading = false;
+       
       },
         errorResponse => {
          // console.log("garces: "+errorResponse);
@@ -107,11 +109,11 @@ export class FormComponent implements OnInit {
   toggleID(){
     this.provideID = !this.provideID;
     if(this.provideID){
-      this.permisoForm.get('id').enable();
-      this.permisoForm.get('id').markAsDirty();
-      this.permisoForm.get('id').markAsTouched();
+      this.agendaForm.get('id').enable();
+      this.agendaForm.get('id').markAsDirty();
+      this.agendaForm.get('id').markAsTouched();
     }else{
-      this.permisoForm.get('id').disable();
+      this.agendaForm.get('id').disable();
     }
   }
 
@@ -126,10 +128,10 @@ export class FormComponent implements OnInit {
           let errores = errorResponse.error.errores[i];
           for(let j in errores){
             if(errores[j] == 'El ID debe ser único'){
-              this.permisoForm.get('repeatedId').patchValue(this.permisoForm.get('id').value);
-              this.permisoForm.get('id').enable();
-              this.permisoForm.get('id').markAsDirty();
-              this.permisoForm.get('id').markAsTouched();
+              this.agendaForm.get('repeatedId').patchValue(this.agendaForm.get('id').value);
+              this.agendaForm.get('id').enable();
+              this.agendaForm.get('id').markAsDirty();
+              this.agendaForm.get('id').markAsTouched();
               break;
             }
           }
@@ -141,18 +143,29 @@ export class FormComponent implements OnInit {
 
 
   get getTelefonos(){
-    return this.permisoForm.get('telefonos') as FormArray;
+    return this.agendaForm.get('telefonos') as FormArray;
   }
   addTelefono() {
-    const control = <FormArray>this.permisoForm.controls['telefonos'];
+    const control = <FormArray>this.agendaForm.controls['telefonos'];
     control.push(this.fb.group({telefono: []}));
 
-    console.log("FORM", this.permisoForm.value);
+   // console.log("FORM", this.agendaForm.value);
+    console.log("FORM", this.agendaForm);
   }
 
   removeTelefono(index: number){
-    const control = <FormArray>this.permisoForm.controls['telefonos'];
+    const control = <FormArray>this.agendaForm.controls['telefonos'];
     control.removeAt(index);
+  }
+
+  numberOnly(event): boolean {
+
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
   }
 
 }

@@ -57,10 +57,7 @@ class AgendaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+ 
 
     /**
      * Store a newly created resource in storage.
@@ -124,7 +121,8 @@ class AgendaController extends Controller
                 
                 DB::commit();
 
-                return Response::json(array("status" => 200, "messages" => "Se agrego la información con exito", "data" => $parametros), 200);
+               // return Response::json(array("status" => 200, "messages" => "Se agrego la información con exito", "data" => $parametros), 200);
+               return response()->json(['guardado'=>true,'agenda'=>$agenda],HttpResponse::HTTP_OK);
             }else{
                 return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_CONFLICT);
             }
@@ -143,13 +141,7 @@ class AgendaController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('has-permission',\Permissions::CRUD_PERMISOS);
-        try{
-            $agenda = Agenda::find($id);
-            return response()->json(['data'=>$agenda],HttpResponse::HTTP_OK);
-        }catch(\Exception $e){
-            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
-        }
+        return response()->json(['data'=>Agenda::with('agendatelefono')->find($id)],HttpResponse::HTTP_OK);
     }
 
     /**
@@ -158,18 +150,9 @@ class AgendaController extends Controller
      * @param  \App\Models\CasosCovid\Agenda  $Agenda
      * @return \Illuminate\Http\Response
      */
-    public function edit(Agenda $agenda)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CasosCovid\Agenda  $Agenda
-     * @return \Illuminate\Http\Response
-     */
+
+ 
     public function update(Request $request, $id)
     {
         try{

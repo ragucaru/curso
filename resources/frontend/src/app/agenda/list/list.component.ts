@@ -1,9 +1,12 @@
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../../shared/shared.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AgendaService } from '../agenda.service';
 import { FormComponent } from '../form/form.component';
+
 import { MatDialog } from '@angular/material/dialog';
+
 import { ConfirmActionDialogComponent } from '../../utils/confirm-action-dialog/confirm-action-dialog.component';
 
 @Component({
@@ -21,10 +24,14 @@ export class ListComponent implements OnInit {
   resultsLength: number = 0;
   currentPage: number = 0;
 
-  displayedColumns: string[] = ['id','nombre','apellido_paterno','actions'];
+  displayedColumns: string[] = ['id','nombre','apellido_paterno','numero_telefono','actions'];
   dataSource: any = [];
 
-  constructor(private sharedService: SharedService, private agendaService: AgendaService, public dialog: MatDialog) { }
+ 
+
+
+
+  constructor(private sharedService: SharedService,  private agendaService: AgendaService, public dialog: MatDialog) { }
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
@@ -99,7 +106,7 @@ export class ListComponent implements OnInit {
   confirmDeleteAgenda(id:string = ''){
     const dialogRef = this.dialog.open(ConfirmActionDialogComponent, {
       width: '500px',
-      data: {dialogTitle:'Eliminar Permiso',dialogMessage:'Esta seguro de eliminar este permiso?',btnColor:'warn',btnText:'Eliminar'}
+      data: {dialogTitle:'Eliminar Contacto',dialogMessage:'Esta seguro de eliminar este contacto',btnColor:'warn',btnText:'Eliminar'}
     });
 
     dialogRef.afterClosed().subscribe(reponse => {
@@ -114,4 +121,9 @@ export class ListComponent implements OnInit {
     });
   }
 
+
+
+  
+  
+ 
 }
