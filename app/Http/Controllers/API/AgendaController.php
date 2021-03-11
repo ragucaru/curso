@@ -72,7 +72,7 @@ class AgendaController extends Controller
 
         try{
             $validation_rules = [
-                'nombre' => 'required',
+                'nombre' => 'required|unique:agenda',
                 'apellido_paterno' => 'required',   
                 'apellido_materno' => 'required' ,
                 'direccion' => 'required'           

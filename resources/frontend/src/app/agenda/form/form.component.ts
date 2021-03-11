@@ -82,6 +82,7 @@ export class FormComponent implements OnInit {
           if(errorResponse.error){
             if(errorResponse.error.validacion === false){
               this.manageRepeatedIDError(errorResponse);
+              
             }
           }
       });
@@ -95,11 +96,12 @@ export class FormComponent implements OnInit {
        
       },
         errorResponse => {
-         // console.log("garces: "+errorResponse);
+          console.log("garces: "+errorResponse);
           this.isLoading = false;
           if(errorResponse.error){
             if(errorResponse.error.validacion === false){
               this.manageRepeatedIDError(errorResponse);
+              this.sharedService.showSnackBar("Verifique sus datos", 'Cerrar', 5000); 
             }
           }
       });

@@ -50,8 +50,8 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.xs="xs"> Telefono </th>
                                 <!-- <td mat-cell *matCellDef="let row" fxHide.xs="xs"> {{row.agendatelefono.length}} </td>  -->
                                 <td mat-cell *matCellDef="let row">
-                                    <mat-chip-list>
-                                        <mat-chip *ngFor="let n of row.agendatelefono, let i=index ">{{row.agendatelefono[i].numero_telefono}} </mat-chip>
+                                    <mat-chip-list class="mat-chip-list-stacked">
+                                        <mat-chip color="primary" selected  *ngFor="let n of row.agendatelefono, let i=index ">{{row.agendatelefono[i].numero_telefono}} </mat-chip>
                                     </mat-chip-list>
 
                                 </td>
