@@ -49,7 +49,28 @@ export class FormComponent implements OnInit {
       this.agendaService.getAgenda(id).subscribe(
         
         response => {
-          console.log(response);
+          console.log("como viene",response);
+
+          if(response.data.agendatelefono.length > 0){
+
+            response.data.agendatelefono.forEach(element => {
+
+              // console.log("el objeto",element);
+
+              this.addTelefono(element.numero_telefono);
+  
+              // const control = <FormArray>this.agendaForm.controls['telefonos'];
+              // control.removeAt(0);
+              // control.push(this.fb.group({telefono: [element.numero_telefono]}));
+  
+              // console.log("el arraglo",control);
+              
+            });
+
+          }
+
+
+      
           this.agenda = response.data;
           this.agendaForm.patchValue(this.agenda);
           this.isLoading = false;
@@ -147,9 +168,19 @@ export class FormComponent implements OnInit {
   get getTelefonos(){
     return this.agendaForm.get('telefonos') as FormArray;
   }
-  addTelefono() {
-    const control = <FormArray>this.agendaForm.controls['telefonos'];
-    control.push(this.fb.group({telefono: []}));
+  addTelefono(value) {
+    let valor = value;
+    if(valor){
+      
+      const control = <FormArray>this.agendaForm.controls['telefonos'];
+      control.removeAt(0);
+      control.push(this.fb.group({telefono: [valor]}));
+
+    }else{
+      const control = <FormArray>this.agendaForm.controls['telefonos'];
+      control.push(this.fb.group({telefono: []}));
+    }
+
 
    // console.log("FORM", this.agendaForm.value);
     console.log("FORM", this.agendaForm);
